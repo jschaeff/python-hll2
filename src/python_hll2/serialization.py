@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-from __future__ import division
-from python_hll.hlltype import HLLType
-from python_hll.util import BitUtil
+from python_hll2.hlltype import HLLType
+from python_hll2.util import BitUtil
 
 
 class BigEndianAscendingWordDeserializer:
@@ -29,10 +27,10 @@ class BigEndianAscendingWordDeserializer:
         :param list bytes: the byte array containing the serialized words. Cannot be ``None``.
         """
         if not 1 <= word_length <= 64:
-            raise ValueError("Word length must be >= 1 and <= 64. (was: {word_length})".format(word_length=word_length))
+            raise ValueError(f"Word length must be >= 1 and <= 64. (was: {word_length})")
 
         if byte_padding < 0:
-            raise ValueError("Byte padding must be >= zero. (was: {byte_padding})".format(byte_padding=byte_padding))
+            raise ValueError(f"Byte padding must be >= zero. (was: {byte_padding})")
 
         self._word_length = word_length
         self._bytes = bytes
@@ -65,7 +63,7 @@ class BigEndianAscendingWordDeserializer:
         :rtype: long
         """
         if position < 0:
-            raise ValueError("Array index out of bounds for {position}".format(position=position))
+            raise ValueError(f"Array index out of bounds for {position}")
 
         # First bit of the word
         first_bit_index = (position * self._word_length)
@@ -87,7 +85,7 @@ class BigEndianAscendingWordDeserializer:
             last_byte_bits_to_consume = bits_after_byte_boundary
 
         if last_byte_index >= len(self._bytes):
-            raise ValueError("Word out of bounds of backing array, {} >= {}".format(last_byte_index, len(self._bytes)))
+            raise ValueError(f"Word out of bounds of backing array, {last_byte_index} >= {len(self._bytes)}")
 
         # Accumulator
         value = 0
@@ -186,11 +184,11 @@ class BigEndianAscendingWordSerializer:
                serialized words. Must be greater than or equal to zero.
         """
         if (word_length < 1) or (word_length > 64):
-            raise ValueError('Word length must be >= 1 and <= 64. (was: {})'.format(word_length))
+            raise ValueError(f"Word length must be >= 1 and <= 64. (was: {word_length})")
         if word_count < 0:
-            raise ValueError('Word count must be >= 0. (was: {})'.format(word_count))
+            raise ValueError(f"Word count must be >= 0. (was: {word_count})")
         if byte_padding < 0:
-            raise ValueError('Byte padding must be must be >= 0. (was: {})'.format(byte_padding))
+            raise ValueError(f"Byte padding must be must be >= 0. (was: {byte_padding})")
 
         self._word_length = word_length
         self._word_count = word_count
@@ -215,7 +213,7 @@ class BigEndianAscendingWordSerializer:
         :rtype: void
         """
         if self._words_written == self._word_count:
-            raise ValueError('Cannot write more words, backing array full!')
+            raise ValueError("Cannot write more words, backing array full!")
 
         bits_left_in_word = self._word_length
 
@@ -271,7 +269,7 @@ class BigEndianAscendingWordSerializer:
         :rtype: list
         """
         if self._words_written < self._word_count:
-            raise ValueError('Not all words have been written! ({}/{})'.format(self._words_written, self._word_count))
+            raise ValueError(f"Not all words have been written! ({self._words_written}/{self._word_count})")
         return self._bytes
 
 
@@ -518,8 +516,7 @@ class SchemaVersionOne:
         :rtype: HLLType
         """
         if ordinal < 0 or ordinal >= len(cls.TYPE_ORDINALS):
-            raise ValueError('Invalid type ordinal {}. Only 0-{} inclusive allowed'.format(
-                ordinal, (len(cls.TYPE_ORDINALS) - 1)))
+            raise ValueError(f"Invalid type ordinal {ordinal}. Only 0-{len(cls.TYPE_ORDINALS) - 1} inclusive allowed")
         return cls.TYPE_ORDINALS[ordinal]
 
 
@@ -587,11 +584,11 @@ class SerializationUtil:
         :rtype: SchemaVersion
         """
         if schema_version_number >= len(cls.REGISTERED_SCHEMA_VERSIONS) or schema_version_number < 0:
-            raise ValueError('Invalid schema version number {}'.format(schema_version_number))
+            raise ValueError(f"Invalid schema version number {schema_version_number}")
         schema_version = cls.REGISTERED_SCHEMA_VERSIONS[schema_version_number]
 
         if schema_version is None:
-            raise ValueError('Unknown schema version number {}'.format(schema_version_number))
+            raise ValueError(f"Unknown schema version number {schema_version_number}")
         return schema_version
 
     @classmethod

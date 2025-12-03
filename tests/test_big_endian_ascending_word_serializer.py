@@ -1,9 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """Unit tests for BigEndianAscendingWordSerializer """
 
-from python_hll.serialization import BigEndianAscendingWordSerializer
+from python_hll2.serialization import BigEndianAscendingWordSerializer
 
 
 def test_constructor_error():
@@ -16,7 +13,7 @@ def test_constructor_error():
         BigEndianAscendingWordSerializer(0, 1, 0)
         assert False, "Should complain about too-short words."
     except ValueError as e:
-        assert 'Word length must be >= 1 and <= 64. (was: 0)' == str(e)
+        assert str(e) == "Word length must be >= 1 and <= 64. (was: 0)"
 
     # Word length is too long
     try:

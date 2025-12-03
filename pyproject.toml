@@ -7,16 +7,18 @@ dependencies = [
 ]
 description = "A Python implementation of HyperLogLog. Maintained fork from python-hll"
 authors = [
-            "Jon Aquino <jonathan.aquino@adroll.com>",
-            "Kushagra Verma <kushagra.verma@adroll.com>",
-            "Alex Leu <alex.leu@adroll.com>",
-            "Michael Tran <michael.tran@adroll.com>",
-            "Rodrigo Westrupp <rodrigo.westrupp@adroll.com>",
-            "Sridharan Subramanian <sridharan.subramanian@adroll.com>",
-            "Piyush Srivastava <piyush.srivastava@adroll.com>"]
-maintainers = ["Jonathan Schaeffer <jonathan.schaeffer@univ-grenoble-alpes.fr>",]
+            { name="Jon Aquino", email="jonathan.aquino@adroll.com"},
+            { name="Kushagra Verma", email="kushagra.verma@adroll.com"},
+            { name="Alex Leu", email="alex.leu@adroll.com"},
+            { name="Michael Tran", email="michael.tran@adroll.com"},
+            { name="Rodrigo Westrupp", email="rodrigo.westrupp@adroll.com"},
+            { name="Sridharan Subramanian", email="sridharan.subramanian@adroll.com"},
+            { name="Piyush Srivastava", email="piyush.srivastava@adroll.com"}]
+maintainers = [{name="Jonathan Schaeffer", email="jonathan.schaeffer@univ-grenoble-alpes.fr"}]
 license = "MIT"
 readme = "README.md"
+homepage = "https://github.com/jschaeff/python-hll"
+repository = "https://github.com/jschaeff/python-hll"
 
 [dependency-groups]
 dev = [
@@ -36,3 +38,7 @@ lint.ignore = [
   "ISC001", # As demanded by ruff format
 ]
 output-format = "concise"
+
+[tool.pytest]
+minversion = "9.0"
+python_files = ["*_tests.py", "test_*.py", "tests/*.py"]

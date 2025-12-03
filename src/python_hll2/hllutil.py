@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 from math import log
-from python_hll.hll import HLL
-from python_hll.util import NumberUtil
-from python_hll.util import BitUtil
+
+from python_hll2.hll import HLL
+from python_hll2.util import BitUtil, NumberUtil
 
 
 class HLLUtil:
@@ -67,19 +66,18 @@ class HLLUtil:
         """
 
         if m < 16:
-            raise Exception("'m' cannot be less than 16 ({m} < 16).".format(m=m))
+            raise Exception(f"'m' cannot be less than 16 ({m} < 16).")
 
-        elif m == 16:
+        if m == 16:
             return 0.673 * m * m
 
-        elif m == 32:
+        if m == 32:
             return 0.697 * m * m
 
-        elif m == 64:
+        if m == 64:
             return 0.709 * m * m
 
-        else:
-            return (0.7213 / (1.0 + 1.079 / m)) * m * m
+        return (0.7213 / (1.0 + 1.079 / m)) * m * m
 
     @classmethod
     def pw_max_mask(cls, register_size_in_bits):

@@ -1,12 +1,13 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """Unit tests for BigEndianAscendingWordDeserializer """
 
-from sys import maxsize
 import random
-from python_hll.serialization import BigEndianAscendingWordDeserializer, BigEndianAscendingWordSerializer
-from python_hll.util import BitUtil
+from sys import maxsize
+
+from python_hll2.serialization import (
+    BigEndianAscendingWordDeserializer,
+    BigEndianAscendingWordSerializer,
+)
+from python_hll2.util import BitUtil
 
 
 def test_constructor_error():

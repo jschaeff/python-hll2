@@ -1,13 +1,12 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from __future__ import division
-from math import ceil, log
 import random
-from python_hll.hlltype import HLLType
-from python_hll.hll import HLL
-from python_hll.hllutil import HLLUtil
-from python_hll.serialization import SerializationUtil
-from python_hll.util import BitUtil
+from math import ceil, log
+
+from python_hll2.hll import HLL
+from python_hll2.hlltype import HLLType
+from python_hll2.hllutil import HLLUtil
+from python_hll2.serialization import SerializationUtil
+from python_hll2.util import BitUtil
+
 from . import probabilistic_test_util
 
 """Tests ``HLL`` of type ``HLLType.SPARSE``."""
@@ -120,7 +119,7 @@ def test_small_range_smoke():
     # ------------------------------------------------------------
     # all but one register set
     hll = HLL.create_for_testing(log2m, regwidth, 128, 256, HLLType.SPARSE)
-    for i in range(0, m - 1):
+    for i in range(m - 1):
         hll.add_raw(probabilistic_test_util.construct_hll_value(log2m, i, 1))
 
     # Trivially true that small correction conditions hold: all but
@@ -149,7 +148,7 @@ def test_normal_range_smoke():
     hll = HLL.create_for_testing(log2m, regwidth, 128, m, HLLType.SPARSE)
 
     register_value = 7  # chosen to ensure neither correction kicks in
-    for i in range(0, m):
+    for i in range(m):
         hll.add_raw(probabilistic_test_util.construct_hll_value(log2m, i, register_value))
 
     cardinality = hll.cardinality()
@@ -181,7 +180,7 @@ def test_large_range_smoke():
     hll = HLL.create_for_testing(log2m, regwidth, 128, m, HLLType.SPARSE)
 
     register_value = 31  # chosen to ensure large correction kicks in
-    for i in range(0, m):
+    for i in range(m):
         hll.add_raw(probabilistic_test_util.construct_hll_value(log2m, i, register_value))
 
     cardinality = hll.cardinality()
@@ -277,7 +276,7 @@ def test_union():
     hll_b = HLL.create_for_testing(log2m, 5, 128, sparse_threshold, HLLType.SPARSE)
 
     # fill up sets to maxCapacity
-    for i in range(0, sparse_threshold):
+    for i in range(sparse_threshold):
         hll_a.add_raw(probabilistic_test_util.construct_hll_value(log2m, i, 1))
         hll_b.add_raw(probabilistic_test_util.construct_hll_value(log2m, i + sparse_threshold, 1))  # non-overlapping
 
@@ -326,7 +325,7 @@ def test_to_from_bytes():
     # Should work on a partially filled element
     hll = HLL.create_for_testing(log2m, regwidth, 128, sparse_threshold, HLLType.SPARSE)
 
-    for i in range(0, 3):
+    for i in range(3):
         raw_value = probabilistic_test_util.construct_hll_value(log2m, i, (i + 9))
         hll.add_raw(raw_value)
 
@@ -343,7 +342,7 @@ def test_to_from_bytes():
     # Should work on a full set
     hll = HLL.create_for_testing(log2m, regwidth, 128, sparse_threshold, HLLType.SPARSE)
 
-    for i in range(0, sparse_threshold):
+    for i in range(sparse_threshold):
         raw_value = probabilistic_test_util.construct_hll_value(log2m, i, (i % 9) + 1)
         hll.add_raw(raw_value)
 
@@ -367,12 +366,12 @@ def test_random_values():
     random.seed(seed)
     max_java_long = 9223372036854775807
 
-    for run in range(0, 100):
+    for run in range(100):
         hll = HLL.create_for_testing(log2m, regwidth, 128, sparse_threshold, HLLType.SPARSE)
 
         map = {}
 
-        for i in range(0, sparse_threshold):
+        for i in range(sparse_threshold):
             raw_value = random.randint(1, max_java_long)
 
             register_index = probabilistic_test_util.get_register_index(raw_value, log2m)
@@ -382,7 +381,7 @@ def test_random_values():
 
             hll.add_raw(raw_value)
 
-        for key in map.keys():
+        for key in map:
             expected_register_value = map.get(key, 0)
             assert_register_present(hll, key, expected_register_value)
 

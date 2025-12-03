@@ -1,7 +1,7 @@
 """Tests ``HLLUtil`` static methods."""
 
-from python_hll.hll import HLL
-from python_hll.hllutil import HLLUtil
+from python_hll2.hll import HLL
+from python_hll2.hllutil import HLLUtil
 
 
 def test_large_estimator_cutoff():

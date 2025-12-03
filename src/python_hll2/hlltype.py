@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class HLLType:
     """
     The types of algorithm/data structure that HLL can utilize. For more

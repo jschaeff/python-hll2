@@ -1,13 +1,12 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from __future__ import division
-import pytest
 from math import ceil, log
-from python_hll.hlltype import HLLType
-from python_hll.hll import HLL
-from python_hll.hllutil import HLLUtil
-from python_hll.serialization import SerializationUtil
-from python_hll.util import BitUtil
+
+import pytest
+from python_hll2.hll import HLL
+from python_hll2.hlltype import HLLType
+from python_hll2.hllutil import HLLUtil
+from python_hll2.serialization import SerializationUtil
+from python_hll2.util import BitUtil
+
 from . import probabilistic_test_util
 
 """Tests ``HLL`` of type ``HLLType.FULL``."""
@@ -35,7 +34,7 @@ def test_small_range_smoke():
 
     # all but one register set
     hll = HLL.create_for_testing(log2m, regwidth, 128, 256, HLLType.FULL)
-    for i in range(0, m - 1):
+    for i in range(m - 1):
         hll.add_raw(probabilistic_test_util.construct_hll_value(log2m, i, 1))
 
     # Trivially true that small correction conditions hold: all but
@@ -64,7 +63,7 @@ def test_normal_range_smoke():
 
     # all registers at 'medium' value
     register_value = 7  # chosen to ensure neither correction kicks in
-    for i in range(0, m):
+    for i in range(m):
         hll.add_raw(probabilistic_test_util.construct_hll_value(log2m, i, register_value))
 
     cardinality = hll.cardinality()
@@ -93,7 +92,7 @@ def test_large_range_smoke():
     hll = HLL.create_for_testing(log2m, regwidth, 128, 256, HLLType.FULL)
 
     register_value = 31  # chosen to ensure large correction kicks in
-    for i in range(0, m):
+    for i in range(m):
         hll.add_raw(probabilistic_test_util.construct_hll_value(log2m, i, register_value))
 
     cardinality = hll.cardinality()
@@ -213,11 +212,11 @@ def test_clear():
 
     hll = HLL.create_for_testing(log2m, regwidth, 128, 256, HLLType.FULL)
     bit_vector = hll._probabilistic_storage
-    for i in range(0, m):
+    for i in range(m):
         bit_vector.set_register(i, i)
 
     hll.clear()
-    for i in range(0, m):
+    for i in range(m):
         assert bit_vector.get_register(i) == 0  # default value of register
 
 
@@ -248,7 +247,7 @@ def test_to_from_bytes():
     # Should work on a partially filled element
     hll = HLL.create_for_testing(log2m, regwidth, 128, 256, HLLType.FULL)
 
-    for i in range(0, 3):
+    for i in range(3):
         raw_value = probabilistic_test_util.construct_hll_value(log2m, i, (i+9))
         hll.add_raw(raw_value)
 
@@ -264,7 +263,7 @@ def test_to_from_bytes():
     # Should work on a full set
     hll = HLL.create_for_testing(log2m, regwidth, 128, 256, HLLType.FULL)
 
-    for i in range(0, BitUtil.left_shift_int(1, log2m)):
+    for i in range(BitUtil.left_shift_int(1, log2m)):
         raw_value = probabilistic_test_util.construct_hll_value(log2m, i, (i % 9) + 1)
         hll.add_raw(raw_value)
 

@@ -1,11 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import random
 
-from python_hll.hlltype import HLLType
-from python_hll.hll import HLL
-from python_hll.serialization import SerializationUtil
+from python_hll2.hll import HLL
+from python_hll2.hlltype import HLLType
+from python_hll2.serialization import SerializationUtil
 
 """Unit tests for BitVector."""
 
@@ -59,7 +56,7 @@ def test_union():
     # Unioning two sets whose union exceeds the cardinality cap should promote
     hll_a = new_hll(128)  # arbitrary
     hll_b = new_hll(128)  # arbitrary
-    for i in range(0, 128):
+    for i in range(128):
         hll_a.add_raw(i)
         hll_b.add_raw(i+128)
 
@@ -96,7 +93,7 @@ def test_to_from_bytes():
 
     # Should work on a partially filled set
     hll = new_hll(128)
-    for i in range(0, 3):
+    for i in range(3):
         hll.add_raw(i)
 
     bytes = hll.to_bytes(schema_version)
@@ -109,7 +106,7 @@ def test_to_from_bytes():
     explicit_threshold = 128
     hll = new_hll(explicit_threshold)
 
-    for i in range(0, explicit_threshold):
+    for i in range(explicit_threshold):
         hll.add_raw(27 + i)
 
     bytes = hll.to_bytes(schema_version)
@@ -130,7 +127,7 @@ def test_random_values():
     seed = 1  # constant so results are reproducible
     random.seed(seed)
     max_java_long = 9223372036854775807
-    for i in range(0, explicit_threshold):
+    for i in range(explicit_threshold):
         random_long = random.randint(1, max_java_long)
         canonical.add(random_long)
         hll.add_raw(random_long)
@@ -144,12 +141,12 @@ def test_promotion():
     """
     explicit_threshold = 128
     hll = HLL.create_for_testing(11, 5, explicit_threshold, 256, HLLType.EXPLICIT)
-    for i in range(0, explicit_threshold + 1):
+    for i in range(explicit_threshold + 1):
         hll.add_raw(i)
     assert hll.get_type() == HLLType.SPARSE
 
     hll = HLL(11, 5, 4, False, HLLType.EXPLICIT)  # expthresh=4 => explicit_threshold=8
-    for i in range(0, 9):
+    for i in range(9):
         hll.add_raw(i)
     assert hll.get_type() == HLLType.FULL
 

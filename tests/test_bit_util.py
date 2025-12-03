@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
-from python_hll.util import BitUtil
+from python_hll2.util import BitUtil
 
 UNSIGNED_TO_SIGNED_INTEGERS = {
     0: 0,

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from python_hll.util import BitVector
+from python_hll2.util import BitVector
 
 """Unit tests for BitVector."""
 

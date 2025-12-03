@@ -1,8 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from __future__ import division
-from python_hll.util import BitUtil
 from math import ceil
+
+from python_hll2.util import BitUtil
 
 
 def construct_hll_value(log2m, register_index, register_value):

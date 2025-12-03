@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """Serialization smoke-tests."""
 
 import random
 import sys
 from copy import deepcopy
-from python_hll.hlltype import HLLType
-from python_hll.hll import HLL
+
+from python_hll2.hll import HLL
+from python_hll2.hlltype import HLLType
 
 # A fixed random seed so that this test is reproducible.
 RANDOM_SEED = 1
@@ -21,7 +21,7 @@ def test_serialization_smoke(fastonly):
     random.seed(RANDOM_SEED)
     random_count = 250
     max_java_long = 9223372036854775807
-    randoms = [random.randint(1, max_java_long) for i in range(0, random_count)]
+    randoms = [random.randint(1, max_java_long) for i in range(random_count)]
     assert_cardinality(HLLType.EMPTY, randoms, fastonly)
     assert_cardinality(HLLType.EXPLICIT, randoms, fastonly)
     assert_cardinality(HLLType.SPARSE, randoms, fastonly)
@@ -57,5 +57,5 @@ def assert_cardinality(hll_type, items, fastonly):
                     assert clone.get_type() == hll.get_type()
                     assert clone.to_bytes() == hll.to_bytes()
 
-                    sys.stdout.write('.')
+                    sys.stdout.write(".")
                     sys.stdout.flush()

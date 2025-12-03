@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from math import log
+
 import numpy as np
 
 
@@ -50,37 +49,36 @@ class BitUtil:
             # by contract
             return -1
 
-        elif value & 0xFF != 0:
+        if value & 0xFF != 0:
             index = int(cls.unsigned_right_shift_long(value, 0) & 0xFF)
             return cls.LEAST_SIGNIFICANT_BIT[index] + 0
 
-        elif value & 0xFFFF != 0:
+        if value & 0xFFFF != 0:
             index = int(cls.unsigned_right_shift_long(value, 8) & 0xFF)
             return cls.LEAST_SIGNIFICANT_BIT[index] + 8
 
-        elif value & 0xFFFFFF != 0:
+        if value & 0xFFFFFF != 0:
             index = int(cls.unsigned_right_shift_long(value, 16) & 0xFF)
             return cls.LEAST_SIGNIFICANT_BIT[index] + 16
 
-        elif value & 0xFFFFFFFF != 0:
+        if value & 0xFFFFFFFF != 0:
             index = int(cls.unsigned_right_shift_long(value, 24) & 0xFF)
             return cls.LEAST_SIGNIFICANT_BIT[index] + 24
 
-        elif value & 0xFFFFFFFFFF != 0:
+        if value & 0xFFFFFFFFFF != 0:
             index = int(cls.unsigned_right_shift_long(value, 32) & 0xFF)
             return cls.LEAST_SIGNIFICANT_BIT[index] + 32
 
-        elif value & 0xFFFFFFFFFFFF != 0:
+        if value & 0xFFFFFFFFFFFF != 0:
             index = int(cls.unsigned_right_shift_long(value, 40) & 0xFF)
             return cls.LEAST_SIGNIFICANT_BIT[index] + 40
 
-        elif value & 0xFFFFFFFFFFFFFF != 0:
+        if value & 0xFFFFFFFFFFFFFF != 0:
             index = int(cls.unsigned_right_shift_long(value, 48) & 0xFF)
             return cls.LEAST_SIGNIFICANT_BIT[index] + 48
 
-        else:
-            index = int(cls.unsigned_right_shift_long(value, 56) & 0xFF)
-            return cls.LEAST_SIGNIFICANT_BIT[index] + 56
+        index = int(cls.unsigned_right_shift_long(value, 56) & 0xFF)
+        return cls.LEAST_SIGNIFICANT_BIT[index] + 56
 
     @classmethod
     def unsigned_right_shift_long(cls, val, n):
@@ -381,7 +379,7 @@ class NumberUtil:
     LOGE_2 = 0.6931471805599453
 
     # the hex characters
-    HEX = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+    HEX = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
 
     @classmethod
     def log2(cls, value):
@@ -417,8 +415,8 @@ class NumberUtil:
         :rtype: string
         """
         if offset >= len(bytes):  # by contract
-            raise Exception("Offset is greater than the length, {offset} >= {byte_array_length}"
-                            .format(offset=offset, byte_array_length=len(bytes)))
+            raise Exception(f"Offset is greater than the length, {offset} >= {len(bytes)}"
+                            )
         byte_count = min(len(bytes) - offset, count)
         upper_bound = byte_count + offset
 
@@ -431,7 +429,7 @@ class NumberUtil:
             chars[char_index] = cls.HEX[value & 0x0F]
             char_index += 1
 
-        return ''.join(chars)
+        return "".join(chars)
 
     @classmethod
     def from_hex(cls, string, offset, count):
@@ -454,10 +452,10 @@ class NumberUtil:
         """
 
         if offset >= len(string):  # by contract
-            raise Exception("Offset is greater than the length, {offset} >= {string_length}"
-                            .format(offset=offset, string_length=len(string)))
+            raise Exception(f"Offset is greater than the length, {offset} >= {len(string)}"
+                            )
         if (count & 0x01) != 0:  # by contract
-            raise Exception("Count is not divisible by two, ({})".format(count))
+            raise Exception(f"Count is not divisible by two, ({count})")
 
         char_count = min(len(string) - offset, count)
         upper_bound = offset + char_count
@@ -482,37 +480,36 @@ class NumberUtil:
                   through ``15``.
         :rtype: int
         """
-        if character == '0':
+        if character == "0":
             return 0
-        elif character == '1':
+        if character == "1":
             return 1
-        elif character == '2':
+        if character == "2":
             return 2
-        elif character == '3':
+        if character == "3":
             return 3
-        elif character == '4':
+        if character == "4":
             return 4
-        elif character == '5':
+        if character == "5":
             return 5
-        elif character == '6':
+        if character == "6":
             return 6
-        elif character == '7':
+        if character == "7":
             return 7
-        elif character == '8':
+        if character == "8":
             return 8
-        elif character == '9':
+        if character == "9":
             return 9
-        elif character in ['a', 'A']:
+        if character in ["a", "A"]:
             return 10
-        elif character in ['b', 'B']:
+        if character in ["b", "B"]:
             return 11
-        elif character in ['c', 'C']:
+        if character in ["c", "C"]:
             return 12
-        elif character in ['d', 'D']:
+        if character in ["d", "D"]:
             return 13
-        elif character in ['e', 'E']:
+        if character in ["e", "E"]:
             return 14
-        elif character in ['f', 'F']:
+        if character in ["f", "F"]:
             return 15
-        else:
-            raise Exception("Character is not in [a-fA-F0-9]: ({})".format(character))
+        raise Exception(f"Character is not in [a-fA-F0-9]: ({character})")

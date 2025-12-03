@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
 
-from __future__ import division
 from copy import deepcopy
 from math import ceil, floor
 
-from python_hll.hlltype import HLLType
-from python_hll.serialization import SerializationUtil, HLLMetadata
-from python_hll.util import NumberUtil, BitVector, BitUtil
+from python_hll2.hlltype import HLLType
+from python_hll2.serialization import HLLMetadata, SerializationUtil
+from python_hll2.util import BitUtil, BitVector, NumberUtil
 
 
 class HLL:
@@ -244,7 +242,7 @@ class HLL:
                 self._add_raw_probabilistic(raw_value)
             return
 
-        elif self._type == HLLType.EXPLICIT:
+        if self._type == HLLType.EXPLICIT:
             self._explicit_storage.add(raw_value)
 
             # promotion, if necessary
@@ -260,7 +258,7 @@ class HLL:
                 self._explicit_storage = None
             return
 
-        elif self._type == HLLType.SPARSE:
+        if self._type == HLLType.SPARSE:
             self._add_raw_sparse_probabilistic(raw_value)
 
             # promotion, if necessary
@@ -272,12 +270,11 @@ class HLL:
                 self._sparse_probabilistic_storage = None
             return
 
-        elif self._type == HLLType.FULL:
+        if self._type == HLLType.FULL:
             self._add_raw_probabilistic(raw_value)
             return
 
-        else:
-            raise Exception("Unsupported HLL type: {}".format(self._type))
+        raise Exception(f"Unsupported HLL type: {self._type}")
 
     def _add_raw_sparse_probabilistic(self, raw_value):
         """
@@ -383,7 +380,7 @@ class HLL:
         elif type == HLLType.FULL:
             self._probabilistic_storage = BitVector(self._regwidth, self._m)
         else:
-            raise Exception("Unsupported HLL type: {}".format(self._type))
+            raise Exception(f"Unsupported HLL type: {self._type}")
 
     def cardinality(self):
         """
@@ -394,14 +391,13 @@ class HLL:
         """
         if self._type == HLLType.EMPTY:
             return 0  # by definition
-        elif self._type == HLLType.EXPLICIT:
+        if self._type == HLLType.EXPLICIT:
             return len(self._explicit_storage)
-        elif self._type == HLLType.SPARSE:
+        if self._type == HLLType.SPARSE:
             return ceil(self._sparse_probabilistic_algorithm_cardinality())
-        elif self._type == HLLType.FULL:
+        if self._type == HLLType.FULL:
             return ceil(self._full_probabilistic_algorithm_cardinality())
-        else:
-            raise Exception("Unsupported HLL type: {}".format(self._type))
+        raise Exception(f"Unsupported HLL type: {self._type}")
 
     def _sparse_probabilistic_algorithm_cardinality(self):
         """
@@ -431,10 +427,9 @@ class HLL:
         estimator = self._alpha_m_squared / indicator_function
         if number_of_zeroes != 0 and estimator < self._small_estimator_cutoff:
             return HLLUtil.small_estimator(m, number_of_zeroes)
-        elif estimator <= self._large_estimator_cutoff:
+        if estimator <= self._large_estimator_cutoff:
             return estimator
-        else:
-            return HLLUtil.large_estimator(self._log2m, self._regwidth, estimator)
+        return HLLUtil.large_estimator(self._log2m, self._regwidth, estimator)
 
     def _full_probabilistic_algorithm_cardinality(self):
         """
@@ -460,10 +455,9 @@ class HLL:
         estimator = self._alpha_m_squared / sum
         if number_of_zeroes != 0 and (estimator < self._small_estimator_cutoff):
             return HLLUtil.small_estimator(m, number_of_zeroes)
-        elif estimator <= self._large_estimator_cutoff:
+        if estimator <= self._large_estimator_cutoff:
             return estimator
-        else:
-            return HLLUtil.large_estimator(self._log2m, self._regwidth, estimator)
+        return HLLUtil.large_estimator(self._log2m, self._regwidth, estimator)
 
     def clear(self):
         """
@@ -477,16 +471,15 @@ class HLL:
         :rtype: void
         """
         if self._type == HLLType.EMPTY:
-            return  # do nothing
-        elif self._type == HLLType.EXPLICIT:
+            return None  # do nothing
+        if self._type == HLLType.EXPLICIT:
             return self._explicit_storage.clear()
-        elif self._type == HLLType.SPARSE:
+        if self._type == HLLType.SPARSE:
             return self._sparse_probabilistic_storage.clear()
-        elif self._type == HLLType.FULL:
+        if self._type == HLLType.FULL:
             self._probabilistic_storage.fill(0)
-            return
-        else:
-            raise Exception('Unsupported HLL type: {}'.format(self._type))
+            return None
+        raise Exception(f"Unsupported HLL type: {self._type}")
 
     def union(self, other):
         """
@@ -576,7 +569,7 @@ class HLL:
             self._explicit_storage = None
             return
 
-        elif self._type == HLLType.SPARSE:
+        if self._type == HLLType.SPARSE:
             if other.get_type() == HLLType.EXPLICIT:
                 # src: EXPLICIT
                 # dest: SPARSE
@@ -601,25 +594,24 @@ class HLL:
                     self._probabilistic_storage.set_max_register(register_index, register_value)
                 self._sparse_probabilistic_storage = None
 
-        else:  # destination is HLLType.FULL
-            if other._type == HLLType.EXPLICIT:
-                # src: EXPLICIT
-                # dest: FULL
-                # Add the raw values from the source to the destination.
-                # Promotion is not possible, so don't bother checking.
+        elif other._type == HLLType.EXPLICIT:
+            # src: EXPLICIT
+            # dest: FULL
+            # Add the raw values from the source to the destination.
+            # Promotion is not possible, so don't bother checking.
 
-                for value in other._explicit_storage:
-                    self.add_raw(value)
+            for value in other._explicit_storage:
+                self.add_raw(value)
 
-            else:  # source is HLLType.SPARSE
-                # src: SPARSE
-                # dest: FULL
-                # Merge the registers from the source into the destination.
-                # Promotion is not possible, so don't bother checking.
+        else:  # source is HLLType.SPARSE
+            # src: SPARSE
+            # dest: FULL
+            # Merge the registers from the source into the destination.
+            # Promotion is not possible, so don't bother checking.
 
-                for register_index in other._sparse_probabilistic_storage.keys():
-                    register_value = other._sparse_probabilistic_storage.get(register_index)
-                    self._probabilistic_storage.set_max_register(register_index, register_value)
+            for register_index in other._sparse_probabilistic_storage.keys():
+                register_value = other._sparse_probabilistic_storage.get(register_index)
+                self._probabilistic_storage.set_max_register(register_index, register_value)
 
     def _heterogenous_union(self, other):
         """
@@ -639,7 +631,7 @@ class HLL:
         if self._type == HLLType.EMPTY:
             self._heterogeneous_union_for_empty_hll(other)
             return
-        elif other.get_type() == HLLType.EMPTY:
+        if other.get_type() == HLLType.EMPTY:
             # source is empty, so just return destination since it is unchanged
             return
 
@@ -659,7 +651,7 @@ class HLL:
             # union of empty and empty is empty
             return
 
-        elif self._type == HLLType.EXPLICIT:
+        if self._type == HLLType.EXPLICIT:
             for value in other._explicit_storage:
                 # Note: add_raw() will handle promotion, if necessary
                 self.add_raw(value)
@@ -688,7 +680,7 @@ class HLL:
             return
 
         else:
-            raise Exception('Unsupported HLL type: {}'.format(self._type))
+            raise Exception(f"Unsupported HLL type: {self._type}")
 
     def to_bytes(self, schema_version=SerializationUtil.DEFAULT_SCHEMA_VERSION):
         """
@@ -745,7 +737,7 @@ class HLL:
             byte_array = serializer.get_bytes()
 
         else:
-            raise Exception('Unsupported HLL type: {}'.format(self._type))
+            raise Exception(f"Unsupported HLL type: {self._type}")
 
         # no use of it if any _explicit_off or _explicit_auto is true
         log2_explicit_threshold = 0
@@ -812,7 +804,7 @@ class HLL:
             word_length = hll._regwidth
 
         else:
-            raise Exception('Unsupported HLL type: {}'.format(type))
+            raise Exception(f"Unsupported HLL type: {type}")
 
         deserializer = schema_version.get_deserializer(type, word_length, bytes)
         if type == HLLType.EXPLICIT:
@@ -850,6 +842,6 @@ class HLL:
                 hll._probabilistic_storage.set_register(i, deserializer.read_word())
 
         else:
-            raise Exception('Unsupported HLL type: {}'.format(type))
+            raise Exception(f"Unsupported HLL type: {type}")
 
         return hll
