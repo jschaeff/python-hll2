@@ -1,6 +1,10 @@
-[tool.poetry]
+[project]
 name = "python-hll2"
-version = "1.0.0"
+version = "1.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.3.5",
+]
 description = "A Python implementation of HyperLogLog. Maintained fork from python-hll"
 authors = [
             "Jon Aquino <jonathan.aquino@adroll.com>",
@@ -13,20 +17,22 @@ authors = [
 maintainers = ["Jonathan Schaeffer <jonathan.schaeffer@univ-grenoble-alpes.fr>",]
 license = "MIT"
 readme = "README.md"
-packages = [{ include = "python_hll"}]
-homepage = "https://github.com/jschaeff/python-hll"
-repository = "https://github.com/jschaeff/python-hll"
 
-[tool.poetry.dependencies]
-python = "^3.11"
-numpy = "^1.26.4"
-
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.0.0"
-flake8 = "^7.0.0"
-coverage = "^7.4.1"
+[dependency-groups]
+dev = [
+    "pytest-cov>=7.0.0",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.ruff]
+lint.select = ["ALL"]
+lint.ignore = [
+  "ANN", # Any-type
+  "COM812", # Missing-trailing-comma
+  "D",      # Docstrings stuff. Ignore for now
+  "ISC001", # As demanded by ruff format
+]
+output-format = "concise"
