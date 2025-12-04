@@ -1,10 +1,10 @@
 # python-hll
 
-[![image](https://img.shields.io/pypi/v/python_hll.svg)](https://pypi.python.org/pypi/python_hll)
+[![image](https://img.shields.io/pypi/v/python_hll2.svg)](https://pypi.python.org/pypi/python_hll2)
 
 [![Documentation Status](https://readthedocs.org/projects/python-hll/badge/?version=latest)](https://python-hll.readthedocs.io/en/latest/?badge=latest)
 
-[![image](https://img.shields.io/badge/github-python--hll-yellow)](https://github.com/AdRoll/python-hll)
+[![image](https://img.shields.io/badge/github-python--hll2-yellow)](https://github.com/jschaeff/python-hll2)
 
 A Python implementation of
 [HyperLogLog](http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf)
@@ -25,7 +25,7 @@ to run while in Python `test_hll_serialization` takes 1.5 hours to run
 -   Runs on: Python 2.7 and 3
 -   Free software: MIT license
 -   Documentation: <https://python-hll.readthedocs.io>
--   GitHub: <https://github.com/AdRoll/python-hll>
+-   GitHub: <https://github.com/jschaeff/python-hll2>
 
 ## Overview
 
@@ -36,7 +36,7 @@ overview of what HLLs are and how they work.
 
 Hashing and adding a value to a new HLL:
 
-    from python_hll.hll import HLL
+    from python_hll2.hll import HLL
     import mmh3
     value_to_hash = 'foo'
     hashed_value = mmh3.hash(value_to_hash)
@@ -63,7 +63,7 @@ v1.0.0](https://github.com/aggregateknowledge/hll-storage-spec/blob/v1.0.0/STORA
 (for example, retrieved from a [PostgreSQL
 database](https://github.com/aggregateknowledge/postgresql-hll)):
 
-    from python_hll.util import NumberUtil
+    from python_hll2.util import NumberUtil
     input = '\\x128D7FFFFFFFFFF6A5C420'
     hex_string = input[2:]
     hll = HLL.from_bytes(NumberUtil.from_hex(hex_string, 0, len(hex_string)))
@@ -77,7 +77,7 @@ database](https://github.com/aggregateknowledge/postgresql-hll)):
     output = "\\x" + NumberUtil.to_hex(bytes, 0, len(bytes))
 
 Also see the [API
-documentation](https://python-hll.readthedocs.io/en/latest/docs/python_hll.html).
+documentation](https://python-hll.readthedocs.io/en/latest/docs/python_hll2.html).
 
 ## Development
 
