@@ -121,7 +121,7 @@ class HLL:
                start at. This cannot be ``None``.
         :type type: HLLType
         """
-        from python_hll.hllutil import HLLUtil
+        from python_hll2.hllutil import HLLUtil
 
         self._log2m = log2m
         if log2m < HLL.MINIMUM_LOG2M_PARAM or log2m > HLL.MAXIMUM_EXPLICIT_THRESHOLD:
@@ -409,7 +409,7 @@ class HLL:
         :returns: the exact, unrounded cardinality given by the HLL algorithm
         :rtype: float
         """
-        from python_hll.hllutil import HLLUtil
+        from python_hll2.hllutil import HLLUtil
         m = self._m
 
         # compute the "indicator function" -- sum(2^(-M[j])) where M[j] is the
@@ -439,7 +439,7 @@ class HLL:
 
         :rtype: float
         """
-        from python_hll.hllutil import HLLUtil
+        from python_hll2.hllutil import HLLUtil
         # for performance
         m = self._m
         # compute the "indicator function" -- sum(2^(-M[j])) where M[j] is the
@@ -692,7 +692,7 @@ class HLL:
                   ``None`` or empty.
         :rtype: list
         """
-        from python_hll.hllutil import HLLUtil
+        from python_hll2.hllutil import HLLUtil
         if self._type == HLLType.EMPTY:
             byte_array_length = schema_version.padding_bytes(self._type)
             byte_array = [0] * byte_array_length
@@ -768,7 +768,7 @@ class HLL:
         :returns: the deserialized HLL. This will never be ``None``.
         :rtype: HLL
         """
-        from python_hll.hllutil import HLLUtil
+        from python_hll2.hllutil import HLLUtil
         schema_version = SerializationUtil.get_schema_version(bytes)
         metadata = schema_version.read_metadata(bytes)
 
