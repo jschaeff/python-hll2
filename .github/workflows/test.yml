@@ -3,7 +3,8 @@ name: Run Tests and Update Coverage Badge
 on:
   push:
     branches: [main]
-  pull_request:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]"
 
 jobs:
   test:
@@ -34,6 +35,7 @@ jobs:
 
       - name: Generate badge
         run: |
+          uv tool install genbadge
           uv run genbadge coverage -i coverage.xml -o $BADGE_SOURCE
 
       - uses: actions/checkout@v1
