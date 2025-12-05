@@ -12,6 +12,9 @@ on:
 jobs:
   release-build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
