@@ -1,6 +1,6 @@
 [project]
 name = "python-hll2"
-version = "2.0.1"
+version = "2.0.2"
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=2.3.5",
